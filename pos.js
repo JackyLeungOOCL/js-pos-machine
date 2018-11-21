@@ -70,9 +70,14 @@ function getDetailItemList(inventory, itemList, detailItemList) {
         // let index = -1;
         if (index < 0) {
             // create new detailItemList item
-            let newItem = getItemDetail(barcode, inventory);
-            newItem["quantity"] = 1;
-            newItem["subtotal"] = newItem["price"];
+            let newItemQuantity = getItemDetail(barcode, inventory);
+            let newItem = newItemQuantity["itemDetail"];
+            newItem["quantity"] = newItemQuantity["quantity"];
+            if (newItem["subtotal"] == null) {
+                newItem["subtotal"] = newItem["price"] * newItem["quantity"];
+            } else {
+                newItem["subtotal"] += newItem["price"] * newItem["quantity"];
+            }
             detailItemList.push(newItem);
         } else {
             // add 1 to existing detailItemList item quantity
