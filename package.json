@@ -1,0 +1,23 @@
+{
+  "name": "js-pos-machine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "jest": "^23.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JackyLeungOOCL/js-pos-machine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JackyLeungOOCL/js-pos-machine/issues"
+  },
+  "homepage": "https://github.com/JackyLeungOOCL/js-pos-machine#readme"
+}
