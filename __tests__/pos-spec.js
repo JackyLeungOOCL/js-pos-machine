@@ -127,10 +127,9 @@ describe("should get item details correctly", function() {
                 price: 3.00
             }
         ];
-        const initList = new Array();
     
         // When
-        const detailItemList = pos.getDetailItemList(inventory, barcodes, initList);
+        const detailItemList = pos.getDetailItemList(inventory, barcodes);
         const expected = [
             {
                 barcode: 'ITEM000000',
@@ -351,6 +350,37 @@ describe("should print receipt correctly", function() {
             "Saving: 3.00 (yuan)\n" +
             "**********************"
         
+        // Then
+        expect(receipt).toBe(expected);
+    });
+
+    it("should print receipt", function() {
+        //Given
+        const itemList = 
+        [
+            'ITEM000001',
+            'ITEM000001',
+            'ITEM000001',
+            'ITEM000001',
+            'ITEM000001',
+            'ITEM000003-2',
+            'ITEM000005',
+            'ITEM000005',
+            'ITEM000005'
+          ]
+
+        // When
+        const receipt = pos.printReceipt(itemList);
+        const expected = 
+            "***<store earning no money>Receipt ***\n" +
+            "Name: Sprite, Quantity: 5 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)\n" +
+            "Name: Litchi, Quantity: 2 kgs, Unit price: 15.00 (yuan), Subtotal: 30.00 (yuan)\n" +
+            "Name: Instant noodle, Quantity: 3 packs, Unit price: 4.50 (yuan), Subtotal: 9.00 (yuan)\n" +
+            "----------------------\n" +
+            "Total: 51.00 (yuan)\n" +
+            "Saving: 7.50 (yuan)\n" +
+            "**********************"
+
         // Then
         expect(receipt).toBe(expected);
     });

@@ -64,7 +64,8 @@ function getItemDetail(barcode, inventory) {
     return {itemDetail: inventory.find(invItem => invItem.barcode == barcode), quantity: quantity};
 }
 
-function getDetailItemList(inventory, itemList, detailItemList) {
+function getDetailItemList(inventory, itemList) {
+    let detailItemList = new Array();
     itemList.forEach(barcode => {
         let index = detailItemList.findIndex(detailItem => detailItem["barcode"] == barcode);
         if (index < 0) {
@@ -133,8 +134,17 @@ function generateReceipt(discountedDetailItemList) {
     return receipt;
 }
 
-function printReceipt() {
-
+function printReceipt(itemList) {
+    let inventory = loadAllItems();
+    let promoteList = loadPromotions();
+    let detailItemList = getDetailItemList(inventory, itemList);
+    let discountList;
+    promoteList.forEach(promotion => {
+        discountList = getDiscountList(promotion["type"], promotion["barcodes"], detailItemList);
+    });
+    let discountedDetailItemList = calculateDiscount(detailItemList, discountList);
+    console.log(generateReceipt(discountedDetailItemList));
+    return generateReceipt(discountedDetailItemList);
 }
 
 module.exports = {
