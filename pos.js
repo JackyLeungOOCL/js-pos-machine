@@ -4,38 +4,38 @@ function loadAllItems() {
     return [
         {
             barcode: 'ITEM000000',
-            name: '可口可乐',
-            unit: '瓶',
+            name: 'Coca-Cola',
+            unit: 'bottle',
             price: 3.00
         },
         {
             barcode: 'ITEM000001',
-            name: '雪碧',
-            unit: '瓶',
+            name: 'Sprite',
+            unit: 'bottle',
             price: 3.00
         },
         {
             barcode: 'ITEM000002',
-            name: '苹果',
-            unit: '斤',
+            name: 'Apple',
+            unit: 'kg',
             price: 5.50
         },
         {
             barcode: 'ITEM000003',
-            name: '荔枝',
-            unit: '斤',
+            name: 'Litchi',
+            unit: 'kg',
             price: 15.00
         },
         {
             barcode: 'ITEM000004',
-            name: '电池',
-            unit: '个',
+            name: 'Battery',
+            unit: '',
             price: 2.00
         },
         {
             barcode: 'ITEM000005',
-            name: '方便面',
-            unit: '袋',
+            name: 'Instant noodle',
+            unit: 'pack',
             price: 4.50
         }
     ];
@@ -67,7 +67,6 @@ function getItemDetail(barcode, inventory) {
 function getDetailItemList(inventory, itemList, detailItemList) {
     itemList.forEach(barcode => {
         let index = detailItemList.findIndex(detailItem => detailItem["barcode"] == barcode);
-        // let index = -1;
         if (index < 0) {
             // create new detailItemList item
             let newItemQuantity = getItemDetail(barcode, inventory);
@@ -88,10 +87,6 @@ function getDetailItemList(inventory, itemList, detailItemList) {
     return detailItemList;
 }
 
-function buyTwoGetOneFree(detailItem) {
-
-}
-
 function getDiscountList(promotion, barcodes, detailItemList) {
     // Buy two get one free promotion
     if (promotion == "BUY_TWO_GET_ONE_FREE") {
@@ -103,10 +98,26 @@ function getDiscountList(promotion, barcodes, detailItemList) {
     }
 }
 
+function calculateDiscount(detailItemList, discountList) {
+    let saving = 0;
+    return detailItemList.map(detailItem => {
+        let discountItem = discountList.find(discountItem => discountItem["barcode"] == detailItem["barcode"]);
+        if (discountItem != null) {
+            saving += detailItem["price"] - discountItem["price"];
+            return discountItem;
+        }
+        return detailItem;
+    });
+}
+
+function printReceipt() {
+
+}
 
 module.exports = {
     getItemDetail,
     getDetailItemList,
-    getDiscountList
-
+    getDiscountList,
+    calculateDiscount,
+    printReceipt
 };

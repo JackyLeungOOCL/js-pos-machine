@@ -260,4 +260,66 @@ describe("should calculate discount correctly", function() {
         // Then
         expect(discountList).toEqual(expected);
     });
+
+    it("calculateDiscount should return discounted detailed items correctly", function() {
+        // Given
+        const detailItemList = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 9.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: 'Sprite',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 9.00
+            }
+        ];
+        const discountList = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 6.00
+            }
+        ];
+
+        // When
+        const discountedDetailItemList = pos.calculateDiscount(detailItemList, discountList);
+        const expected = [
+                {
+                    barcode: 'ITEM000000',
+                    name: 'Coca-Cola',
+                    quantity: 3,
+                    unit: 'bottle',
+                    price: 3.00,
+                    subtotal: 6.00
+                },
+                {
+                    barcode: 'ITEM000001',
+                    name: 'Sprite',
+                    quantity: 3,
+                    unit: 'bottle',
+                    price: 3.00,
+                    subtotal: 9.00
+                }
+            ];
+
+        // Then
+        expect(discountedDetailItemList).toEqual(expected);
+    });
+});
+
+describe("should print receipt correctly", function() {
+    // it("should", function() {
+
+    // });
 });
