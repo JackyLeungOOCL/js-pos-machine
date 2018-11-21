@@ -59,7 +59,22 @@ function getItemDetail(barcode, inventory) {
 }
 
 function getDetailItemList(inventory, itemList, detailItemList) {
-
+    itemList.forEach(barcode => {
+        let index = detailItemList.findIndex(detailItem => detailItem["barcode"] == barcode);
+        // let index = -1;
+        if (index < 0) {
+            // create new detailItemList item
+            let newItem = getItemDetail(barcode, inventory);
+            newItem["quantity"] = 1;
+            newItem["subtotal"] = newItem["price"];
+            detailItemList.push(newItem);
+        } else {
+            // add 1 to existing detailItemList item quantity
+            detailItemList[index]["quantity"]++;
+            detailItemList[index]["subtotal"] += detailItemList[index]["price"];
+        }
+    });
+    return detailItemList;
 }
 
 
