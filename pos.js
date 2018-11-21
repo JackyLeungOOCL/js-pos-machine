@@ -99,15 +99,38 @@ function getDiscountList(promotion, barcodes, detailItemList) {
 }
 
 function calculateDiscount(detailItemList, discountList) {
-    let saving = 0;
     return detailItemList.map(detailItem => {
         let discountItem = discountList.find(discountItem => discountItem["barcode"] == detailItem["barcode"]);
         if (discountItem != null) {
-            saving += detailItem["price"] - discountItem["price"];
             return discountItem;
         }
         return detailItem;
     });
+}
+
+function generateReceipt(discountedDetailItemList) {
+    let receipt = "***<store earning no money>Receipt ***\n";
+    let total = 0;
+    let saving = 0;
+
+    discountedDetailItemList.forEach(discountedItem => {
+        total += discountedItem["subtotal"];
+        saving += discountedItem["price"] * discountedItem["quantity"] - discountedItem["subtotal"];
+        receipt = receipt + 
+            "Name: " + discountedItem["name"] + ", " +
+            "Quantity: " + discountedItem["quantity"] + " " +
+            discountedItem["unit"];
+        receipt = discountedItem["quantity"] > 1 && discountedItem["unit"] != '' ? receipt + "s, " : receipt + ", ";
+        receipt = receipt +
+            "Unit price: " + discountedItem["price"].toFixed(2) + " (yuan), " +
+            "Subtotal: " + discountedItem["subtotal"].toFixed(2) + " (yuan)\n";
+    });
+    receipt = receipt +
+        "----------------------\n" + 
+        "Total: " + total.toFixed(2) + " (yuan)\n" +
+        "Saving: " + saving.toFixed(2) + " (yuan)\n" +
+        "**********************";
+    return receipt;
 }
 
 function printReceipt() {
@@ -119,5 +142,6 @@ module.exports = {
     getDetailItemList,
     getDiscountList,
     calculateDiscount,
+    generateReceipt,
     printReceipt
 };

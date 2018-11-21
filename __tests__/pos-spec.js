@@ -319,7 +319,39 @@ describe("should calculate discount correctly", function() {
 });
 
 describe("should print receipt correctly", function() {
-    // it("should", function() {
+    it("should generate receipt in correct format", function() {
+        // Given
+        const discountedDetailItemList = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 6.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: 'Sprite',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 9.00
+            }
+        ];
 
-    // });
+        // When
+        const receipt = pos.generateReceipt(discountedDetailItemList);
+        const expected = 
+            "***<store earning no money>Receipt ***\n" +
+            "Name: Coca-Cola, Quantity: 3 bottles, Unit price: 3.00 (yuan), Subtotal: 6.00 (yuan)\n" +
+            "Name: Sprite, Quantity: 3 bottles, Unit price: 3.00 (yuan), Subtotal: 9.00 (yuan)\n" +
+            "----------------------\n" +
+            "Total: 15.00 (yuan)\n" +
+            "Saving: 3.00 (yuan)\n" +
+            "**********************"
+        
+        // Then
+        expect(receipt).toBe(expected);
+    });
 });
