@@ -55,7 +55,13 @@ function loadPromotions() {
 }
 
 function getItemDetail(barcode, inventory) {
-    return inventory.find(invItem => invItem.barcode == barcode);
+    let barcodeQuantity = barcode.split('-');
+    let quantity = 1;
+    barcode = barcodeQuantity[0];
+    if (barcodeQuantity.length > 1) {
+        quantity = parseInt(barcodeQuantity[1]);
+    }
+    return {itemDetail: inventory.find(invItem => invItem.barcode == barcode), quantity: quantity};
 }
 
 function getDetailItemList(inventory, itemList, detailItemList) {

@@ -1,7 +1,7 @@
 'use strict';
 const pos = require('../pos');
 
-it("getItemDetail should return item detail", function() {
+it("getItemDetail should return one item detail", function() {
     // Given
     const barcode = "ITEM000001";
     const inventory = [
@@ -23,17 +23,57 @@ it("getItemDetail should return item detail", function() {
     const itemDetail = pos.getItemDetail(barcode, inventory);
     const expected = 
         {
-            barcode: 'ITEM000001',
-            name: '雪碧',
-            unit: '瓶',
-            price: 3.00
+            itemDetail: 
+                {
+                    barcode: 'ITEM000001',
+                    name: '雪碧',
+                    unit: '瓶',
+                    price: 3.00
+                },
+            quantity: 1
         };
 
     // Then
     expect(itemDetail).toEqual(expected);
 });
 
-fit("getDetailItemList should return detail item list with correct quantity", function() {
+it("getItemDetail should return more than one item details", function() {
+    // Given
+    const barcode = "ITEM000001-3";
+    const inventory = [
+        {
+            barcode: 'ITEM000000',
+            name: '可口可乐',
+            unit: '瓶',
+            price: 3.00
+        },
+        {
+            barcode: 'ITEM000001',
+            name: '雪碧',
+            unit: '瓶',
+            price: 3.00
+        }
+    ]
+
+    // When
+    const itemDetail = pos.getItemDetail(barcode, inventory);
+    const expected = 
+        {
+            itemDetail: 
+                {
+                    barcode: 'ITEM000001',
+                    name: '雪碧',
+                    unit: '瓶',
+                    price: 3.00
+                },
+            quantity: 3
+        };
+
+    // Then
+    expect(itemDetail).toEqual(expected);
+});
+
+it("getDetailItemList should return detail item list with correct quantity", function() {
     // Given
     const barcodes = ["ITEM000000", "ITEM000000", "ITEM000001", "ITEM000001", "ITEM000001"];
     const inventory = [
