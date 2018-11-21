@@ -88,9 +88,25 @@ function getDetailItemList(inventory, itemList, detailItemList) {
     return detailItemList;
 }
 
+function buyTwoGetOneFree(detailItem) {
+
+}
+
+function getDiscountList(promotion, barcodes, detailItemList) {
+    // Buy two get one free promotion
+    if (promotion == "BUY_TWO_GET_ONE_FREE") {
+        return detailItemList.filter(detailItem => barcodes.includes(detailItem.barcode)).map(discountItem => {
+            let quantity = discountItem["quantity"];
+            discountItem["subtotal"] = discountItem["price"] * (quantity - Math.floor(quantity/3));
+            return discountItem;
+        });
+    }
+}
+
 
 module.exports = {
     getItemDetail,
-    getDetailItemList
+    getDetailItemList,
+    getDiscountList
 
 };
