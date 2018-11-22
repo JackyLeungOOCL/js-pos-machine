@@ -59,7 +59,7 @@ function getItemDetail(barcode, inventory) {
     let quantity = 1;
     barcode = barcodeQuantity[0];
     if (barcodeQuantity.length > 1) {
-        quantity = parseInt(barcodeQuantity[1]);
+        quantity = parseFloat(barcodeQuantity[1]);
     }
     return {itemDetail: inventory.find(invItem => invItem.barcode == barcode), quantity: quantity};
 }
@@ -67,23 +67,25 @@ function getItemDetail(barcode, inventory) {
 function getDetailItemList(inventory, itemList) {
     let detailItemList = new Array();
     itemList.forEach(barcode => {
-        let index = detailItemList.findIndex(detailItem => detailItem["barcode"] == barcode);
+        // create new detailItemList item
+        let {"itemDetail": itemObject, "quantity": itemQuantity} = getItemDetail(barcode, inventory);
+        let newItem = Object.assign({}, itemObject, {"quantity": itemQuantity});
+        // let newItemQuantity = getItemDetail(barcode, inventory);
+        // let newItem = newItemQuantity["itemDetail"];
+        // newItem["quantity"] = newItemQuantity["quantity"];
+
+        const index = detailItemList.findIndex(detailItem => detailItem["barcode"] == newItem["barcode"]);
+        // console.log(index);
         if (index < 0) {
-            // create new detailItemList item
-            let newItemQuantity = getItemDetail(barcode, inventory);
-            let newItem = newItemQuantity["itemDetail"];
-            newItem["quantity"] = newItemQuantity["quantity"];
-            if (newItem["subtotal"] == null) {
-                newItem["subtotal"] = newItem["price"] * newItem["quantity"];
-            } else {
-                newItem["subtotal"] += newItem["price"] * newItem["quantity"];
-            }
+            newItem["subtotal"] = newItem["price"] * newItem["quantity"];
             detailItemList.push(newItem);
         } else {
-            // add 1 to existing detailItemList item quantity
-            detailItemList[index]["quantity"]++;
-            detailItemList[index]["subtotal"] += detailItemList[index]["price"];
+            // add quantity to existing detailItemList item quantity
+            let newItem2 = detailItemList[index];
+            newItem2["quantity"] += newItem["quantity"];
+            newItem2["subtotal"] = newItem2["quantity"] * newItem2["price"];
         }
+
     });
     return detailItemList;
 }
