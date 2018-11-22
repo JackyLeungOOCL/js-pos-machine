@@ -130,10 +130,10 @@ function buyTwoGetOneFree(detailItemList, promotionBarcodes) {
 //     return detailItemList;
 // }
 
-function getDiscountList(promotion, barcodes, detailItemList) {
+function getDiscountList(promotion, promotionBarcodes, detailItemList) {
     // Buy two get one free promotion
     if (promotion == "BUY_TWO_GET_ONE_FREE") {
-        return buyTwoGetOneFree(detailItemList, barcodes);
+        return buyTwoGetOneFree(detailItemList, promotionBarcodes);
     }
 }
 
