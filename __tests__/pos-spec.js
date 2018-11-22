@@ -1,6 +1,19 @@
 'use strict';
 const pos = require('../pos');
 
+describe("shoud map receipt items correctly", function() {
+    fit("should count single receipt items", function() {
+        const barcodes = ["ITEM000000", "ITEM000000", "ITEM000001", "ITEM000001", "ITEM000001"]
+        const barcodeCount = pos.countByBarcode(barcodes);
+        const expected = 
+            {
+                "ITEM000000": 2,
+                "ITEM000001": 3
+            };
+        expect(barcodeCount).toEqual(expected);
+    })
+})
+
 describe("should get item details correctly", function() {
     it("getItemDetail should return item detail", function() {
         // Given

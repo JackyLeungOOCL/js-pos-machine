@@ -54,6 +54,18 @@ function loadPromotions() {
     ];
 }
 
+function countByBarcode(barcodes) {
+    let barcodeCount = {};
+    barcodes.map(barcode => {
+        if (barcodeCount[barcode] == null) {
+            barcodeCount[barcode] = 1;
+        } else {
+            barcodeCount[barcode] += 1;
+        }
+    });
+    return barcodeCount;
+}
+
 function getItemDetail(barcode, inventory) {
     let barcodeQuantity = barcode.split('-');
     let quantity = 1;
@@ -150,6 +162,7 @@ function printReceipt(itemList) {
 }
 
 module.exports = {
+    countByBarcode,
     getItemDetail,
     getDetailItemList,
     getDiscountList,
