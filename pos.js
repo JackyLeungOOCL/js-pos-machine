@@ -151,6 +151,14 @@ function calculateTotal(discountedDetailItemList) {
     return total;
 }
 
+function calculateSaving(discountedDetailItemList) {
+    let saving = 0;
+    discountedDetailItemList.forEach(discountedItem => {
+        saving += discountedItem["price"] * discountedItem["quantity"] - discountedItem["subtotal"];
+    });
+    return saving;
+}
+
 function generateReceipt(discountedDetailItemList) {
     let receipt = "***<store earning no money>Receipt ***\n";
     let total = 0;
@@ -196,6 +204,7 @@ module.exports = {
     getDiscountList,
     calculateDiscount,
     calculateTotal,
+    calculateSaving,
 
     generateReceipt,
     printReceipt

@@ -443,6 +443,32 @@ describe("should calculate price correctly", function() {
 
         expect(total).toBe(expected);
     });
+
+    fit("should calculate saving", function() {
+        const discountedDetailItemList = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 6.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: 'Sprite',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 9.00
+            }
+        ];
+        
+        const total = pos.calculateSaving(discountedDetailItemList);
+        const expected = 3.00;
+
+        expect(total).toBe(expected);
+    })
 })
 
 describe("should print receipt correctly", function() {
