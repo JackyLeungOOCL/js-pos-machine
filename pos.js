@@ -143,6 +143,14 @@ function calculateDiscount(detailItemList, discountList) {
     });
 }
 
+function calculateTotal(discountedDetailItemList) {
+    let total = 0;
+    discountedDetailItemList.forEach(discountedItem => {
+        total += discountedItem["subtotal"];
+    });
+    return total;
+}
+
 function generateReceipt(discountedDetailItemList) {
     let receipt = "***<store earning no money>Receipt ***\n";
     let total = 0;
@@ -185,9 +193,10 @@ module.exports = {
     countByBarcode,
     getDetailItemList,
     buyTwoGetOneFree,
-
     getDiscountList,
     calculateDiscount,
+    calculateTotal,
+
     generateReceipt,
     printReceipt
 };

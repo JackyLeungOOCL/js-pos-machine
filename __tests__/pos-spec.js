@@ -227,7 +227,7 @@ describe("should format receipt items correctly", function() {
 
 
 describe("should calculate discount correctly", function() {
-    fit("should handle buy-3-get-1-free", function() {
+    it("should handle buy-3-get-1-free", function() {
         const detailItemList = [
             {
                 barcode: 'ITEM000000',
@@ -256,7 +256,7 @@ describe("should calculate discount correctly", function() {
 
     });
 
-    fit("should calculate buy-3-get-1-free for 3 items", function() {
+    it("should calculate buy-3-get-1-free for 3 items", function() {
         // Given
         const promotionType = "BUY_TWO_GET_ONE_FREE";
         const promotionBarcodes = ["ITEM000000"];
@@ -288,7 +288,7 @@ describe("should calculate discount correctly", function() {
         expect(discountList).toEqual(expected);
     });
 
-    fit("should calculate buy-3-get-1-free for 7 items", function() {
+    it("should calculate buy-3-get-1-free for 7 items", function() {
         // Given
         const promotionType = "BUY_TWO_GET_ONE_FREE";
         const promotionBarcodes = ["ITEM000000"];
@@ -320,7 +320,7 @@ describe("should calculate discount correctly", function() {
         expect(discountList).toEqual(expected);
     });
 
-    fit("should calculate buy-3-get-1-free for specific items", function() {
+    it("should calculate buy-3-get-1-free for specific items", function() {
         // Given
         const promotionType = "BUY_TWO_GET_ONE_FREE";
         const promotionBarcodes = ["ITEM000000", "ITEM000005"];
@@ -360,7 +360,7 @@ describe("should calculate discount correctly", function() {
         expect(discountList).toEqual(expected);
     });
 
-    fit("calculateDiscount should return discounted detailed items correctly", function() {
+    it("calculateDiscount should return discounted detailed items correctly", function() {
         // Given
         const detailItemList = [
             {
@@ -416,6 +416,34 @@ describe("should calculate discount correctly", function() {
         expect(discountedDetailItemList).toEqual(expected);
     });
 });
+
+describe("should calculate price correctly", function() {
+    fit("should calculate total", function() {
+        const discountedDetailItemList = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 6.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: 'Sprite',
+                quantity: 3,
+                unit: 'bottle',
+                price: 3.00,
+                subtotal: 9.00
+            }
+        ];
+        
+        const total = pos.calculateTotal(discountedDetailItemList);
+        const expected = 15.00;
+
+        expect(total).toBe(expected);
+    });
+})
 
 describe("should print receipt correctly", function() {
     it("should generate receipt in correct format", function() {
