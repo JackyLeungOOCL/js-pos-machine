@@ -159,6 +159,29 @@ function calculateSaving(discountedDetailItemList) {
     return saving;
 }
 
+function formatReceipt(discountedDetailItemList) {
+    let receipt = "***<store earning no money>Receipt ***\n";
+    const total = calculateTotal(discountedDetailItemList);
+    const saving = calculateSaving(discountedDetailItemList);
+
+    discountedDetailItemList.forEach(discountedItem => {
+        receipt = receipt + 
+            "Name: " + discountedItem["name"] + ", " +
+            "Quantity: " + discountedItem["quantity"] + " " +
+            discountedItem["unit"];
+        receipt = discountedItem["quantity"] > 1 && discountedItem["unit"] != '' ? receipt + "s, " : receipt + ", ";
+        receipt = receipt +
+            "Unit price: " + discountedItem["price"].toFixed(2) + " (yuan), " +
+            "Subtotal: " + discountedItem["subtotal"].toFixed(2) + " (yuan)\n";
+    });
+    receipt = receipt +
+        "----------------------\n" + 
+        "Total: " + total.toFixed(2) + " (yuan)\n" +
+        "Saving: " + saving.toFixed(2) + " (yuan)\n" +
+        "**********************";
+    return receipt;
+}
+
 function generateReceipt(discountedDetailItemList) {
     let receipt = "***<store earning no money>Receipt ***\n";
     let total = 0;
@@ -206,6 +229,6 @@ module.exports = {
     calculateTotal,
     calculateSaving,
 
-    generateReceipt,
+    formatReceipt,
     printReceipt
 };

@@ -418,7 +418,7 @@ describe("should calculate discount correctly", function() {
 });
 
 describe("should calculate price correctly", function() {
-    fit("should calculate total", function() {
+    it("should calculate total", function() {
         const discountedDetailItemList = [
             {
                 barcode: 'ITEM000000',
@@ -444,7 +444,7 @@ describe("should calculate price correctly", function() {
         expect(total).toBe(expected);
     });
 
-    fit("should calculate saving", function() {
+    it("should calculate saving", function() {
         const discountedDetailItemList = [
             {
                 barcode: 'ITEM000000',
@@ -472,7 +472,7 @@ describe("should calculate price correctly", function() {
 })
 
 describe("should print receipt correctly", function() {
-    it("should generate receipt in correct format", function() {
+    fit("should format receipt", function() {
         // Given
         const discountedDetailItemList = [
             {
@@ -494,7 +494,7 @@ describe("should print receipt correctly", function() {
         ];
 
         // When
-        const receipt = pos.generateReceipt(discountedDetailItemList);
+        const receipt = pos.formatReceipt(discountedDetailItemList);
         const expected = 
             "***<store earning no money>Receipt ***\n" +
             "Name: Coca-Cola, Quantity: 3 bottles, Unit price: 3.00 (yuan), Subtotal: 6.00 (yuan)\n" +
