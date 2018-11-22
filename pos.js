@@ -71,6 +71,17 @@ function countByBarcode(barcodes) {
     return barcodeCount;
 }
 
+function getDetailItemList(barcodeCount, inventory) {
+    return Object.keys(barcodeCount).map(barcode => {
+        const itemDetail = inventory.find(item => item.barcode === barcode);
+        const itemQuantity = {"quantity": barcodeCount[barcode]};
+        const subtotal = itemDetail.price * barcodeCount[barcode];
+        const itemSubtotal = {"subtotal": subtotal};
+        
+        return Object.assign({}, itemDetail, itemQuantity, itemSubtotal);
+    });
+}
+
 function getItemDetail(barcode, inventory) {
     let barcodeQuantity = barcode.split('-');
     let quantity = 1;
@@ -81,31 +92,31 @@ function getItemDetail(barcode, inventory) {
     return {itemDetail: inventory.find(invItem => invItem.barcode == barcode), quantity: quantity};
 }
 
-function getDetailItemList(inventory, itemList) {
-    let detailItemList = new Array();
-    itemList.forEach(barcode => {
-        // create new detailItemList item
-        let {"itemDetail": itemObject, "quantity": itemQuantity} = getItemDetail(barcode, inventory);
-        let newItem = Object.assign({}, itemObject, {"quantity": itemQuantity});
-        // let newItemQuantity = getItemDetail(barcode, inventory);
-        // let newItem = newItemQuantity["itemDetail"];
-        // newItem["quantity"] = newItemQuantity["quantity"];
+// function getDetailItemList(inventory, itemList) {
+//     let detailItemList = new Array();
+//     itemList.forEach(barcode => {
+//         // create new detailItemList item
+//         let {"itemDetail": itemObject, "quantity": itemQuantity} = getItemDetail(barcode, inventory);
+//         let newItem = Object.assign({}, itemObject, {"quantity": itemQuantity});
+//         // let newItemQuantity = getItemDetail(barcode, inventory);
+//         // let newItem = newItemQuantity["itemDetail"];
+//         // newItem["quantity"] = newItemQuantity["quantity"];
 
-        const index = detailItemList.findIndex(detailItem => detailItem["barcode"] == newItem["barcode"]);
-        // console.log(index);
-        if (index < 0) {
-            newItem["subtotal"] = newItem["price"] * newItem["quantity"];
-            detailItemList.push(newItem);
-        } else {
-            // add quantity to existing detailItemList item quantity
-            let newItem2 = detailItemList[index];
-            newItem2["quantity"] += newItem["quantity"];
-            newItem2["subtotal"] = newItem2["quantity"] * newItem2["price"];
-        }
+//         const index = detailItemList.findIndex(detailItem => detailItem["barcode"] == newItem["barcode"]);
+//         // console.log(index);
+//         if (index < 0) {
+//             newItem["subtotal"] = newItem["price"] * newItem["quantity"];
+//             detailItemList.push(newItem);
+//         } else {
+//             // add quantity to existing detailItemList item quantity
+//             let newItem2 = detailItemList[index];
+//             newItem2["quantity"] += newItem["quantity"];
+//             newItem2["subtotal"] = newItem2["quantity"] * newItem2["price"];
+//         }
 
-    });
-    return detailItemList;
-}
+//     });
+//     return detailItemList;
+// }
 
 function getDiscountList(promotion, barcodes, detailItemList) {
     // Buy two get one free promotion
@@ -168,6 +179,8 @@ function printReceipt(itemList) {
 
 module.exports = {
     countByBarcode,
+    getDetailItemList,
+
     getItemDetail,
     getDetailItemList,
     getDiscountList,

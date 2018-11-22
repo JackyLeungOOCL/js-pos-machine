@@ -25,6 +25,53 @@ describe("shoud map receipt items correctly", function() {
     });
 });
 
+describe("should format receipt items correctly", function() {
+    fit("should format receipt items", function() {
+        const barcodeCount = 
+            {
+                "ITEM000000": 2,
+                "ITEM000001": 3
+            };
+        const inventory = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                unit: 'bottle',
+                price: 3.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: 'Sprite',
+                unit: 'bottle',
+                price: 3.00
+            }
+        ];
+
+        const detailItemList = pos.getDetailItemList(barcodeCount, inventory);
+        const expected = [
+            {
+                barcode: 'ITEM000000',
+                name: 'Coca-Cola',
+                unit: 'bottle',
+                price: 3.00,
+                quantity: 2,
+                subtotal: 6.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: 'Sprite',
+                unit: 'bottle',
+                price: 3.00,
+                quantity: 3,
+                subtotal: 9.00
+            }
+        ];
+
+        expect(detailItemList).toEqual(expected);
+
+    })
+});
+
 describe("should get item details correctly", function() {
     it("getItemDetail should return item detail", function() {
         // Given
@@ -42,7 +89,7 @@ describe("should get item details correctly", function() {
                 unit: 'bottle',
                 price: 3.00
             }
-        ]
+        ];
     
         // When
         const itemDetail = pos.getItemDetail(barcode, inventory);
