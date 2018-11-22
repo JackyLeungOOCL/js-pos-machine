@@ -82,15 +82,23 @@ function getDetailItemList(barcodeCount, inventory) {
     });
 }
 
-function getItemDetail(barcode, inventory) {
-    let barcodeQuantity = barcode.split('-');
-    let quantity = 1;
-    barcode = barcodeQuantity[0];
-    if (barcodeQuantity.length > 1) {
-        quantity = parseFloat(barcodeQuantity[1]);
-    }
-    return {itemDetail: inventory.find(invItem => invItem.barcode == barcode), quantity: quantity};
+function buyTwoGetOneFree(detailItemList, promotionBarcodes) {
+    return detailItemList.filter(detailItem => promotionBarcodes.includes(detailItem.barcode)).map(discountItem => {
+        let quantity = discountItem["quantity"];
+        discountItem["subtotal"] = discountItem["price"] * (quantity - Math.floor(quantity/3));
+        return discountItem;
+    });
 }
+
+// function getItemDetail(barcode, inventory) {
+//     let barcodeQuantity = barcode.split('-');
+//     let quantity = 1;
+//     barcode = barcodeQuantity[0];
+//     if (barcodeQuantity.length > 1) {
+//         quantity = parseFloat(barcodeQuantity[1]);
+//     }
+//     return {itemDetail: inventory.find(invItem => invItem.barcode == barcode), quantity: quantity};
+// }
 
 // function getDetailItemList(inventory, itemList) {
 //     let detailItemList = new Array();
@@ -121,11 +129,7 @@ function getItemDetail(barcode, inventory) {
 function getDiscountList(promotion, barcodes, detailItemList) {
     // Buy two get one free promotion
     if (promotion == "BUY_TWO_GET_ONE_FREE") {
-        return detailItemList.filter(detailItem => barcodes.includes(detailItem.barcode)).map(discountItem => {
-            let quantity = discountItem["quantity"];
-            discountItem["subtotal"] = discountItem["price"] * (quantity - Math.floor(quantity/3));
-            return discountItem;
-        });
+        return buyTwoGetOneFree(detailItemList, barcodes);
     }
 }
 
@@ -180,9 +184,8 @@ function printReceipt(itemList) {
 module.exports = {
     countByBarcode,
     getDetailItemList,
+    buyTwoGetOneFree,
 
-    getItemDetail,
-    getDetailItemList,
     getDiscountList,
     calculateDiscount,
     generateReceipt,

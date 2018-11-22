@@ -13,7 +13,7 @@ describe("shoud map receipt items correctly", function() {
         expect(barcodeCount).toEqual(expected);
     });
 
-    fit("should count multiple receipt items", function() {
+    it("should count multiple receipt items", function() {
         const barcodes = ["ITEM000000-3", "ITEM000000", "ITEM000001", "ITEM000001", "ITEM000001"]
         const barcodeCount = pos.countByBarcode(barcodes);
         const expected = 
@@ -26,7 +26,7 @@ describe("shoud map receipt items correctly", function() {
 });
 
 describe("should format receipt items correctly", function() {
-    fit("should format receipt items", function() {
+    it("should format receipt items", function() {
         const barcodeCount = 
             {
                 "ITEM000000": 2,
@@ -72,135 +72,175 @@ describe("should format receipt items correctly", function() {
     })
 });
 
-describe("should get item details correctly", function() {
-    it("getItemDetail should return item detail", function() {
-        // Given
-        const barcode = "ITEM000001";
-        const inventory = [
+// describe("should get item details correctly", function() {
+//     it("getItemDetail should return item detail", function() {
+//         // Given
+//         const barcode = "ITEM000001";
+//         const inventory = [
+//             {
+//                 barcode: 'ITEM000000',
+//                 name: 'Coca-Cola',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             },
+//             {
+//                 barcode: 'ITEM000001',
+//                 name: 'Sprite',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             }
+//         ];
+    
+//         // When
+//         const itemDetail = pos.getItemDetail(barcode, inventory);
+//         const expected = 
+//             {
+//                 itemDetail: 
+//                     {
+//                         barcode: 'ITEM000001',
+//                         name: 'Sprite',
+//                         unit: 'bottle',
+//                         price: 3.00
+//                     },
+//                 quantity: 1
+//             };
+    
+//         // Then
+//         expect(itemDetail).toEqual(expected);
+//     });
+    
+//     it("getItemDetail should return one item detail", function() {
+//         // Given
+//         const barcode = "ITEM000001-1";
+//         const inventory = [
+//             {
+//                 barcode: 'ITEM000000',
+//                 name: 'Coca-Cola',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             },
+//             {
+//                 barcode: 'ITEM000001',
+//                 name: 'Sprite',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             }
+//         ]
+    
+//         // When
+//         const itemDetail = pos.getItemDetail(barcode, inventory);
+//         const expected = 
+//             {
+//                 itemDetail: 
+//                     {
+//                         barcode: 'ITEM000001',
+//                         name: 'Sprite',
+//                         unit: 'bottle',
+//                         price: 3.00
+//                     },
+//                 quantity: 1
+//             };
+    
+//         // Then
+//         expect(itemDetail).toEqual(expected);
+//     });
+    
+//     it("getItemDetail should return more than one item details", function() {
+//         // Given
+//         const barcode = "ITEM000001-3";
+//         const inventory = [
+//             {
+//                 barcode: 'ITEM000000',
+//                 name: 'Coca-Cola',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             },
+//             {
+//                 barcode: 'ITEM000001',
+//                 name: 'Sprite',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             }
+//         ]
+    
+//         // When
+//         const itemDetail = pos.getItemDetail(barcode, inventory);
+//         const expected = 
+//             {
+//                 itemDetail: 
+//                     {
+//                         barcode: 'ITEM000001',
+//                         name: 'Sprite',
+//                         unit: 'bottle',
+//                         price: 3.00
+//                     },
+//                 quantity: 3
+//             };
+    
+//         // Then
+//         expect(itemDetail).toEqual(expected);
+//     });
+    
+//     it("getDetailItemList should return detail item list with correct quantity", function() {
+//         // Given
+//         const barcodes = ["ITEM000000-2", "ITEM000000", "ITEM000001", "ITEM000001", "ITEM000001"];
+//         const inventory = [
+//             {
+//                 barcode: 'ITEM000000',
+//                 name: 'Coca-Cola',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             },
+//             {
+//                 barcode: 'ITEM000001',
+//                 name: 'Sprite',
+//                 unit: 'bottle',
+//                 price: 3.00
+//             }
+//         ];
+    
+//         // When
+//         const detailItemList = pos.getDetailItemList(inventory, barcodes);
+//         const expected = [
+//             {
+//                 barcode: 'ITEM000000',
+//                 name: 'Coca-Cola',
+//                 quantity: 3,
+//                 unit: 'bottle',
+//                 price: 3.00,
+//                 subtotal: 9.00
+//             },
+//             {
+//                 barcode: 'ITEM000001',
+//                 name: 'Sprite',
+//                 quantity: 3,
+//                 unit: 'bottle',
+//                 price: 3.00,
+//                 subtotal: 9.00
+//             }
+//         ];
+    
+//         // Then
+//         expect(detailItemList).toEqual(expected);
+//     });
+// });
+
+
+describe("should calculate discount correctly", function() {
+    fit("should handle buy-3-get-1-free", function() {
+        const detailItemList = [
             {
                 barcode: 'ITEM000000',
                 name: 'Coca-Cola',
+                quantity: 3,
                 unit: 'bottle',
-                price: 3.00
-            },
-            {
-                barcode: 'ITEM000001',
-                name: 'Sprite',
-                unit: 'bottle',
-                price: 3.00
+                price: 3.00,
+                subtotal: 9.00
             }
         ];
-    
-        // When
-        const itemDetail = pos.getItemDetail(barcode, inventory);
-        const expected = 
-            {
-                itemDetail: 
-                    {
-                        barcode: 'ITEM000001',
-                        name: 'Sprite',
-                        unit: 'bottle',
-                        price: 3.00
-                    },
-                quantity: 1
-            };
-    
-        // Then
-        expect(itemDetail).toEqual(expected);
-    });
-    
-    it("getItemDetail should return one item detail", function() {
-        // Given
-        const barcode = "ITEM000001-1";
-        const inventory = [
-            {
-                barcode: 'ITEM000000',
-                name: 'Coca-Cola',
-                unit: 'bottle',
-                price: 3.00
-            },
-            {
-                barcode: 'ITEM000001',
-                name: 'Sprite',
-                unit: 'bottle',
-                price: 3.00
-            }
-        ]
-    
-        // When
-        const itemDetail = pos.getItemDetail(barcode, inventory);
-        const expected = 
-            {
-                itemDetail: 
-                    {
-                        barcode: 'ITEM000001',
-                        name: 'Sprite',
-                        unit: 'bottle',
-                        price: 3.00
-                    },
-                quantity: 1
-            };
-    
-        // Then
-        expect(itemDetail).toEqual(expected);
-    });
-    
-    it("getItemDetail should return more than one item details", function() {
-        // Given
-        const barcode = "ITEM000001-3";
-        const inventory = [
-            {
-                barcode: 'ITEM000000',
-                name: 'Coca-Cola',
-                unit: 'bottle',
-                price: 3.00
-            },
-            {
-                barcode: 'ITEM000001',
-                name: 'Sprite',
-                unit: 'bottle',
-                price: 3.00
-            }
-        ]
-    
-        // When
-        const itemDetail = pos.getItemDetail(barcode, inventory);
-        const expected = 
-            {
-                itemDetail: 
-                    {
-                        barcode: 'ITEM000001',
-                        name: 'Sprite',
-                        unit: 'bottle',
-                        price: 3.00
-                    },
-                quantity: 3
-            };
-    
-        // Then
-        expect(itemDetail).toEqual(expected);
-    });
-    
-    it("getDetailItemList should return detail item list with correct quantity", function() {
-        // Given
-        const barcodes = ["ITEM000000-2", "ITEM000000", "ITEM000001", "ITEM000001", "ITEM000001"];
-        const inventory = [
-            {
-                barcode: 'ITEM000000',
-                name: 'Coca-Cola',
-                unit: 'bottle',
-                price: 3.00
-            },
-            {
-                barcode: 'ITEM000001',
-                name: 'Sprite',
-                unit: 'bottle',
-                price: 3.00
-            }
-        ];
-    
-        // When
-        const detailItemList = pos.getDetailItemList(inventory, barcodes);
+        const promotionBarcodes = ["ITEM000000"];
+        
+        const discountList = pos.buyTwoGetOneFree(detailItemList, promotionBarcodes);
         const expected = [
             {
                 barcode: 'ITEM000000',
@@ -208,26 +248,15 @@ describe("should get item details correctly", function() {
                 quantity: 3,
                 unit: 'bottle',
                 price: 3.00,
-                subtotal: 9.00
-            },
-            {
-                barcode: 'ITEM000001',
-                name: 'Sprite',
-                quantity: 3,
-                unit: 'bottle',
-                price: 3.00,
-                subtotal: 9.00
+                subtotal: 6.00
             }
         ];
-    
-        // Then
-        expect(detailItemList).toEqual(expected);
+
+        expect(discountList).toEqual(expected);
+
     });
-});
 
-
-describe("should calculate discount correctly", function() {
-    it("should calculate buy-3-get-1-free for 3 items", function() {
+    fit("should calculate buy-3-get-1-free for 3 items", function() {
         // Given
         const promotionType = "BUY_TWO_GET_ONE_FREE";
         const promotionBarcodes = ["ITEM000000"];
@@ -259,7 +288,7 @@ describe("should calculate discount correctly", function() {
         expect(discountList).toEqual(expected);
     });
 
-    it("should calculate buy-3-get-1-free for 7 items", function() {
+    fit("should calculate buy-3-get-1-free for 7 items", function() {
         // Given
         const promotionType = "BUY_TWO_GET_ONE_FREE";
         const promotionBarcodes = ["ITEM000000"];
@@ -291,7 +320,7 @@ describe("should calculate discount correctly", function() {
         expect(discountList).toEqual(expected);
     });
 
-    it("should calculate buy-3-get-1-free for specific items", function() {
+    fit("should calculate buy-3-get-1-free for specific items", function() {
         // Given
         const promotionType = "BUY_TWO_GET_ONE_FREE";
         const promotionBarcodes = ["ITEM000000", "ITEM000005"];
@@ -331,7 +360,7 @@ describe("should calculate discount correctly", function() {
         expect(discountList).toEqual(expected);
     });
 
-    it("calculateDiscount should return discounted detailed items correctly", function() {
+    fit("calculateDiscount should return discounted detailed items correctly", function() {
         // Given
         const detailItemList = [
             {
