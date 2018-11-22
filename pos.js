@@ -34,8 +34,8 @@ function loadAllItems() {
         },
         {
             barcode: 'ITEM000005',
-            name: 'Instant noodle',
-            unit: 'pack',
+            name: 'Instant noodles',
+            unit: 'bag',
             price: 4.50
         }
     ];
@@ -69,6 +69,10 @@ function countByBarcode(barcodes) {
         }
     });
     return barcodeCount;
+}
+
+function countReceiptItems(barcodes) {
+    return countByBarcode(barcodes);
 }
 
 function getDetailItemList(barcodeCount, inventory) {
@@ -159,25 +163,30 @@ function calculateSaving(discountedDetailItemList) {
     return saving;
 }
 
-function formatReceipt(discountedDetailItemList) {
+function calculatePrice(discountedDetailItemList) {
+    return [calculateTotal(discountedDetailItemList), calculateSaving(discountedDetailItemList)];
+}
+
+function formatReceipt(discountedDetailItemList, total, saving) {
     let receipt = "***<store earning no money>Receipt ***\n";
-    const total = calculateTotal(discountedDetailItemList);
-    const saving = calculateSaving(discountedDetailItemList);
+    const unitNoS = ['', "kg"];
+    total = parseFloat(total).toFixed(2);
+    saving = parseFloat(saving).toFixed(2);
 
     discountedDetailItemList.forEach(discountedItem => {
         receipt = receipt + 
             "Name: " + discountedItem["name"] + ", " +
             "Quantity: " + discountedItem["quantity"] + " " +
             discountedItem["unit"];
-        receipt = discountedItem["quantity"] > 1 && discountedItem["unit"] != '' ? receipt + "s, " : receipt + ", ";
+        receipt = discountedItem["quantity"] > 1 && unitNoS.includes(discountedItem["unit"]) ? receipt + ", " : receipt + "s, ";
         receipt = receipt +
             "Unit price: " + discountedItem["price"].toFixed(2) + " (yuan), " +
             "Subtotal: " + discountedItem["subtotal"].toFixed(2) + " (yuan)\n";
     });
     receipt = receipt +
         "----------------------\n" + 
-        "Total: " + total.toFixed(2) + " (yuan)\n" +
-        "Saving: " + saving.toFixed(2) + " (yuan)\n" +
+        "Total: " + total + " (yuan)\n" +
+        "Saving: " + saving + " (yuan)\n" +
         "**********************";
     return receipt;
 }
@@ -207,17 +216,19 @@ function generateReceipt(discountedDetailItemList) {
     return receipt;
 }
 
-function printReceipt(itemList) {
-    let inventory = loadAllItems();
-    let promoteList = loadPromotions();
-    let detailItemList = getDetailItemList(inventory, itemList);
+function printReceipt(barcodes) {
+    const inventory = loadAllItems();
+    const promoteList = loadPromotions();
+    const barcodeCount = countReceiptItems(barcodes);
+    const detailItemList = getDetailItemList(barcodeCount, inventory);
     let discountList;
     promoteList.forEach(promotion => {
         discountList = getDiscountList(promotion["type"], promotion["barcodes"], detailItemList);
     });
-    let discountedDetailItemList = calculateDiscount(detailItemList, discountList);
-    console.log(generateReceipt(discountedDetailItemList));
-    return generateReceipt(discountedDetailItemList);
+    const discountedDetailItemList = calculateDiscount(detailItemList, discountList);
+    const [total, saving] = calculatePrice(discountedDetailItemList);
+    console.log(formatReceipt(discountedDetailItemList, total, saving));
+    return formatReceipt(discountedDetailItemList, total, saving);
 }
 
 module.exports = {
@@ -228,7 +239,6 @@ module.exports = {
     calculateDiscount,
     calculateTotal,
     calculateSaving,
-
     formatReceipt,
     printReceipt
 };

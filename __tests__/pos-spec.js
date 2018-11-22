@@ -472,7 +472,7 @@ describe("should calculate price correctly", function() {
 })
 
 describe("should print receipt correctly", function() {
-    fit("should format receipt", function() {
+    it("should format receipt", function() {
         // Given
         const discountedDetailItemList = [
             {
@@ -494,7 +494,9 @@ describe("should print receipt correctly", function() {
         ];
 
         // When
-        const receipt = pos.formatReceipt(discountedDetailItemList);
+        const total = 15;
+        const saving = 3;
+        const receipt = pos.formatReceipt(discountedDetailItemList, total, saving);
         const expected = 
             "***<store earning no money>Receipt ***\n" +
             "Name: Coca-Cola, Quantity: 3 bottles, Unit price: 3.00 (yuan), Subtotal: 6.00 (yuan)\n" +
@@ -528,8 +530,8 @@ describe("should print receipt correctly", function() {
         const expected = 
             "***<store earning no money>Receipt ***\n" +
             "Name: Sprite, Quantity: 5 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)\n" +
-            "Name: Litchi, Quantity: 2 kgs, Unit price: 15.00 (yuan), Subtotal: 30.00 (yuan)\n" +
-            "Name: Instant noodle, Quantity: 3 packs, Unit price: 4.50 (yuan), Subtotal: 9.00 (yuan)\n" +
+            "Name: Litchi, Quantity: 2 kg, Unit price: 15.00 (yuan), Subtotal: 30.00 (yuan)\n" +
+            "Name: Instant noodles, Quantity: 3 bags, Unit price: 4.50 (yuan), Subtotal: 9.00 (yuan)\n" +
             "----------------------\n" +
             "Total: 51.00 (yuan)\n" +
             "Saving: 7.50 (yuan)\n" +
@@ -556,14 +558,14 @@ describe("should print receipt correctly", function() {
     
         const receipt = pos.printReceipt(tags);
     
-        const expectText = `***<store earning no money>Receipt ***
-    Name: Sprite, Quantity: 5 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)
-    Name: Litchi, Quantity: 2.5 kg, Unit price: 15.00 (yuan), Subtotal: 37.50 (yuan)
-    Name: Instant noodles, Quantity: 3 bags, Unit price: 4.50 (yuan), Subtotal: 9.00 (yuan)
-    ----------------------
-    Total: 58.50 (yuan)
-    Saving: 7.50 (yuan)
-    **********************`;
+        const expectText = "***<store earning no money>Receipt ***\n" +
+            "Name: Sprite, Quantity: 5 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)\n" +
+            "Name: Litchi, Quantity: 2.5 kg, Unit price: 15.00 (yuan), Subtotal: 37.50 (yuan)\n" +
+            "Name: Instant noodles, Quantity: 3 bags, Unit price: 4.50 (yuan), Subtotal: 9.00 (yuan)\n" +
+            "----------------------\n" +
+            "Total: 58.50 (yuan)\n" +
+            "Saving: 7.50 (yuan)\n" +
+            "**********************";
     
         expect(receipt).toBe(expectText);
       });
