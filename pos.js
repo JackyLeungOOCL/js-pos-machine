@@ -57,10 +57,15 @@ function loadPromotions() {
 function countByBarcode(barcodes) {
     let barcodeCount = {};
     barcodes.map(barcode => {
-        if (barcodeCount[barcode] == null) {
-            barcodeCount[barcode] = 1;
+        const barcodeCode = barcode.split('-')[0];
+        let barcodeQuantity = 1;
+        if (barcode.split('-').length > 1) {
+            barcodeQuantity = parseFloat(barcode.split('-')[1]);
+        }
+        if (barcodeCount[barcodeCode] == null) {
+            barcodeCount[barcodeCode] = barcodeQuantity;
         } else {
-            barcodeCount[barcode] += 1;
+            barcodeCount[barcodeCode] += barcodeQuantity;
         }
     });
     return barcodeCount;
